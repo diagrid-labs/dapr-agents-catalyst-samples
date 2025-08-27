@@ -1,0 +1,4 @@
+dapr-agents
+python-dotenv
+chainlit==2.6.8
+
