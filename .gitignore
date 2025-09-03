@@ -205,3 +205,22 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+/.chainlit/
+/.dapr/
+/.files/
+/.idea/
+/agent-orchestration/.chainlit/
+/agent-orchestration/.files/
+/TravelAssistant_state.json
+/chainlit.md
+/agent-orchestration/Character Agent_state.json
+.DS_Store
+/durable-agent-headless/TravelBuddy_state.json
+/durable-agent-headless/.dapr/
+/durable-agent-chat/chainlit.md
+/durable-agent-chat/TravelAssistant_state.json
+/durable-agent-chat/.files/
+/durable-agent-chat/.dapr/
+/durable-agent-chat/.chainlit/
+/agent-orchestration/.dapr/
+/durable-agent-headless/TravelBuddy-Headless_state.json
