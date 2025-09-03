@@ -1,0 +1,18 @@
+version: 1
+common:
+  resourcesPath: ../resources
+  logLevel: info
+  appLogDestination: console
+  daprdLogDestination: console
+
+apps:
+- appID: durable-agent-headless
+  appDirPath: ./
+  appPort: 8001
+  daprHTTPPort: 3500
+  command: ["python", "app.py"]
+
+
+- appID: pubsub-client
+  appDirPath: ./
+  command: ["python", "app_pubsub_client.py"]

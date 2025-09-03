@@ -1,0 +1,13 @@
+version: 1
+common:
+  resourcesPath: ../resources
+  logLevel: info
+  appLogDestination: console
+  daprdLogDestination: console
+
+apps:
+- appID: agent-orchestration-activity
+  appDirPath: ./
+  daprHTTPPort: 3500
+  command: [ "python", "app_activity.py" ]
+
