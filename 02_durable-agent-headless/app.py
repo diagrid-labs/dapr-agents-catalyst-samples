@@ -39,30 +39,39 @@ def search_flights(destination: str) -> List[FlightOption]:
 
 async def main():
     try:
-        # Initialize TravelBuddy agent
-        travel_planner = DurableAgent(
-            name="TravelBuddy-Headless",
-            role="Travel Planner",
-            goal="Help users find flights and remember preferences",
-            instructions=["Find flights","Remember preferences","Provide clear info"],
-            tools=[search_flights],
-            llm=OpenAIChatClient(model="gpt-4o"),
 
-            # PubSub input
-            message_bus_name="message-pubsub",
+travel_planner = DurableAgent(
+    name="TravelBuddy",
+    role="Travel Planner",
+    goal="Help users plan trips by finding flights and suggesting hotels",
+    instructions=[
+        "Understand user travel intent even if input is incomplete",
+        "Search for flights and hotels based on context",
+        "Adapt recommendations when preferences change",
+        "Remember user preferences for future queries",
+        "Provide clear and concise information"
+    ],
+    tools=[search_flights, search_hotels],
 
-            # Execution state
-            state_store_name="execution-state",
-            state_key="execution-headless",
+    llm=OpenAIChatClient(model="gpt-4o"),
 
-            # Memory state
-            memory=ConversationDaprStateMemory(
-                store_name="memory-state", session_id=f"session-headless-{uuid.uuid4().hex[:8]}"
-            ),
+    # PubSub input for real-time interaction
+    message_bus_name="message-pubsub",
 
-            # Discovery
-            agents_registry_store_name="registry-state",
-        )
+    # Execution state (workflow progress, retries, failure recovery)
+    state_store_name="execution-state",
+
+    # Long-term memory (preferences, past trips, context continuity)
+    memory=ConversationDaprStateMemory(
+        store_name="memory-state", session_id="my-session"
+    )
+)
+
+
+
+
+
+
 
         # start REST
         travel_planner.as_service(port=8001)

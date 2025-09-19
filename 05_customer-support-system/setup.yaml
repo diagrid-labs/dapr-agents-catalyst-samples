@@ -1,0 +1,9 @@
+version: 1
+common:
+  resourcesPath: ../resources/
+apps:
+  - appID: customer-support-system
+    appDirPath: ./
+    appPort: 8000
+    env:
+    command: [ "python", "setup_sample_data.py"]

@@ -224,3 +224,8 @@ __marimo__/
 /durable-agent-chat/.chainlit/
 /agent-orchestration/.dapr/
 /durable-agent-headless/TravelBuddy-Headless_state.json
+/02_durable-agent-headless/TravelBuddy-Headless_state.json
+/01_durable-agent-hello-world/TravelBuddy-HelloWorld_state.json
+/03_durable-agent-chat/TravelAssistant-Chat_state.json
+/05_customer-support-system/.dapr/
+/03_durable-agent-chat/.chainlit/

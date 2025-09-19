@@ -50,6 +50,12 @@ The agent will automatically:
 
 ## Monitor Execution in Catalyst
 
+After running the deployment command, navigate to [Catalyst](https://catalyst.diagrid.io/) to monitor the execution:
+
+1. Go to **https://catalyst.diagrid.io/**
+2. Click on **Workflows** in the left menu
+3. You'll see the agent execution workflow that was automatically created
+
 ### Workflow Execution
 - Navigate to Catalyst dashboard → Workflows
 - View the automatically created workflow for the agent execution
