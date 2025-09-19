@@ -51,7 +51,7 @@ def get_character(ctx):
     return character
 
 # Activity 2
-@wfr.activity(name="step2")
+@wfr.activity(name="step2", appId=app2)
 def get_line(ctx, character: str):
     response = asyncio.run(agent.run(f"What is a famous line by {character}"))
     

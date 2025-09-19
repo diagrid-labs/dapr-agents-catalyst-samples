@@ -39,7 +39,8 @@ diagrid project create dapr-agents-catalyst-samples --deploy-managed-pubsub --de
 
 This provisions a complete managed Dapr environment in the cloud. The project overview shows your managed infrastructure components being deployed:
 
-![Catalyst Project Componenets Overview](images/catalyst-components.png)
+![Catalyst Project Components Overview](images/catalyst-components.png)
+
 
 ## Examples
 

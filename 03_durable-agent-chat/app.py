@@ -41,7 +41,7 @@ async def start():
     
     # Create the DurableAgent instance with the session-specific memory
     travel_planner = DurableAgent(
-        name="TravelAssistant",
+        name="TravelAssistant-Chat",
         role="Travel Assistant",
         goal="Help users find flights and remember preferences",
         instructions=[
@@ -50,13 +50,15 @@ async def start():
             "Provide clear flight information with airline names and prices.",
         ],
         tools=[search_flights],
+        llm=OpenAIChatClient(model="gpt-4o"),
         message_bus_name="message-pubsub",
         state_store_name="execution-state",
+        state_key="execution-chat",
+
         agents_registry_store_name="registry-state",
         memory=ConversationDaprStateMemory(
             store_name="memory-state", session_id=session_id
         ),
-        llm=OpenAIChatClient(model="gpt-3.5-turbo"),
     )
     
     # Store the agent in the user session
