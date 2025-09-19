@@ -1,7 +1,7 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name:  customer-notification-llm
+  name: customer-notification-llm
 spec:
   type: conversation.openai
   version: v1

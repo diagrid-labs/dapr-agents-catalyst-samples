@@ -225,6 +225,8 @@ When everything is working correctly, you should see:
 - **Features**: Context-aware, personalized notifications with ticket details
 - **Output**: AI-generated customer notification with resolution summary
 
+![customer-support-execution-paths.png](../images/customer-support-execution-paths.png)
+
 ## Sample Data
 
 The system includes sample customers with different entitlement levels:
