@@ -6,13 +6,7 @@ common:
   daprdLogDestination: console
 
 apps:
-- appID: durable-agent-headless1
-  appDirPath: ./
-  appPort: 8001
-  daprHTTPPort: 3500
-  command: ["python", "app.py"]
-
-- appID: durable-agent-headless2
+- appID: durable-agent-headless
   appDirPath: ./
   appPort: 8001
   daprHTTPPort: 3500
