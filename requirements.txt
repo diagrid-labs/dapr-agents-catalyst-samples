@@ -1,7 +1,7 @@
 dapr-agents>=0.9.1
 python-dotenv
 chainlit==2.6.8
-
-dapr-ext-workflow
+dapr-ext-workflow>=1.16.0
 requests
 uvicorn
+

@@ -2,13 +2,18 @@
 
 import asyncio
 import logging
-import uuid
 import time
+import uuid
 from typing import List
 from pydantic import BaseModel, Field
-from dapr_agents import tool, DurableAgent, OpenAIChatClient
+from dapr_agents import tool, Agent
+from dapr_agents.llm.dapr import DaprChatClient
+import os
+
 from dapr_agents.memory import ConversationDaprStateMemory
 from dotenv import load_dotenv
+
+os.environ.setdefault("DAPR_LLM_COMPONENT_DEFAULT", "openai")
 
 # Define tool output model
 class FlightOption(BaseModel):
@@ -24,7 +29,6 @@ class DestinationSchema(BaseModel):
 def search_flights(destination: str) -> List[FlightOption]:
     """Search for flights to the specified destination."""
     # Mock flight data (would be an external API call in a real app)
-    time.sleep(10)
 
     return [
         FlightOption(airline="SkyHighAir", price=450.00),
@@ -32,26 +36,28 @@ def search_flights(destination: str) -> List[FlightOption]:
     ]
 
 async def main():
-
-    travel_planner = DurableAgent(
+    travel_planner = Agent(
         name="TravelBuddy-HelloWorld",
         role="Travel Assistant",
         goal="Help users find flights and remember preferences",
         instructions=["Find flights","Remember preferences","Provide clear info"],
         tools=[search_flights],
-        llm=OpenAIChatClient(model="gpt-4o"),
 
-        message_bus_name="message-pubsub",
-        state_store_name="execution-state",
-        state_key="execution-hello-world",
+        # Dapr conversation api for LLM interactions
+        llm = DaprChatClient(),
+
+        # Long-term memory (preferences, past trips, context continuity)
         memory=ConversationDaprStateMemory(
-            store_name="memory-state", session_id=f"session-headless-{uuid.uuid4().hex[:8]}"
+            store_name="memory-state", session_id=f"session-hello-world-{uuid.uuid4().hex[:8]}"
         ),
-        agents_registry_store_name="registry-state",
     )
-
-    response = await travel_planner.run("Find me flights to London and Paris?")
-    print("Travel Planner Agent response1: " + response)
+    try:
+        response1 = await travel_planner.run("I love London")
+        print(response1)
+        response2 = await travel_planner.run("Find me one random flight there")
+        print(response2)
+    except Exception as e:
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
     load_dotenv()

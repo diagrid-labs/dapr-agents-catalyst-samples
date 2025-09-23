@@ -1,9 +1,0 @@
-# Core dependencies from top-level requirements.txt
- python-dotenv
-
-# Additional dependencies for Customer Support System
- 
-dapr
-dapr-ext-workflow
-requests
-uvicorn

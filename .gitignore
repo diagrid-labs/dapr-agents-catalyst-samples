@@ -229,3 +229,7 @@ __marimo__/
 /03_durable-agent-chat/TravelAssistant-Chat_state.json
 /05_customer-support-system/.dapr/
 /03_durable-agent-chat/.chainlit/
+/03_durable-agent-chat/.dapr/
+/03_durable-agent-chat/.files/
+/03_durable-agent-chat/chainlit.md
+/01_non-durable-agent-hello-world/.dapr/

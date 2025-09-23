@@ -24,38 +24,38 @@ This system demonstrates a complete customer support workflow that:
 └─────────────────┘    └──────────────────┘    └─────────────────┘
                                 │
                                 ▼
-                    ┌──────────────────────────────────┐
-                    │            Activities            │
-                    │                                  │
-                    │  ┌─────────────────────────────┐ │
-                    │  │      Triage Activity        │ │
-                    │  │  ┌─────────────────────────┐│ │
-                    │  │  │    Triage Agent         ││ │
-                    │  │  │  - Lookup customer      ││ │ ◀── State Store (Customer Data)
-                    │  │  │  - Check entitlement    ││ │ ◀── State Store (System Info)
-                    │  │  └─────────────────────────┘│ │
-                    │  └─────────────────────────────┘ │
-                    │                                  │
-                    │  ┌─────────────────────────────┐ │
-                    │  │    Expert Analysis Activity │ │
-                    │  │  ┌─────────────────────────┐│ │
-                    │  │  │    Expert Agent         ││ │ ◀── Knowledge Base (MCP)
-                    │  │  │  - Deep analysis        ││ │     (Multiple Queries)
-                    │  │  │  - Multiple KB queries  ││ │
-                    │  │  └─────────────────────────┘│ │
-                    │  │  Activity Level Operations:  │ │
-                    │  │  - Store analysis result     │ │ ──▶ State Store (Analysis)
-                    │  │  - Publish notification      │ │ ──▶ PubSub (Notifications)
-                    │  └─────────────────────────────┘ │
-                    │                                  │
-                    │  ┌─────────────────────────────┐ │
-                    │  │   Notification Activity     │ │
-                    │  │  ┌─────────────────────────┐│ │
-                    │  │  │  Notification Function  ││ │ ◀── Conversation API
-                    │  │  │  - Create message       ││ │
-                    │  │  └─────────────────────────┘│ │
-                    │  └─────────────────────────────┘ │
-                    └──────────────────────────────────┘
+                ┌──────────────────────────────────┐
+                │            Activities            │
+                │                                  │
+                │  ┌─────────────────────────────┐ │
+                │  │      Triage Activity        │ │
+                │  │  ┌─────────────────────────┐│ │
+                │  │  │    Triage Agent         ││ │
+                │  │  │  - Lookup customer      ││ │ ◀── State Store (Customer Data)
+                │  │  │  - Check entitlement    ││ │ ◀── State Store (System Info)
+                │  │  └─────────────────────────┘│ │
+                │  └─────────────────────────────┘ │
+                │                                  │
+                │  ┌─────────────────────────────┐ │
+                │  │    Expert Analysis Activity │ │
+                │  │  ┌─────────────────────────┐│ │
+                │  │  │    Expert Agent         ││ │ ◀── Knowledge Base (MCP)
+                │  │  │  - Deep analysis        ││ │     (Multiple Queries)
+                │  │  │  - Multiple KB queries  ││ │
+                │  │  └─────────────────────────┘│ │
+                │  │  Activity Level Operations: │ │
+                │  │  - Store analysis result    │ │ ──▶ State Store (Analysis)
+                │  │  - Publish notification     │ │ ──▶ PubSub (Notifications)
+                │  └─────────────────────────────┘ │
+                │                                  │
+                │  ┌─────────────────────────────┐ │
+                │  │   Notification Activity     │ │
+                │  │  ┌─────────────────────────┐│ │
+                │  │  │  Notification Function  ││ │ ◀── Conversation API
+                │  │  │  - Create message       ││ │
+                │  │  └─────────────────────────┘│ │
+                │  └─────────────────────────────┘ │
+                └──────────────────────────────────┘
 ```
 
 ## Features
