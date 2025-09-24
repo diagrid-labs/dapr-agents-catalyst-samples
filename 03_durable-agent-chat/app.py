@@ -10,8 +10,13 @@ from dapr_agents import tool, DurableAgent, OpenAIChatClient
 from dapr_agents.memory import ConversationDaprStateMemory
 from dotenv import load_dotenv
 
+from dapr_agents.llm.dapr import DaprChatClient
+import os
+
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
+
+os.environ.setdefault("DAPR_LLM_COMPONENT_DEFAULT", "openai")
 
 # Define tool output model
 class FlightOption(BaseModel):
@@ -50,7 +55,7 @@ async def start():
             "Provide clear flight information with airline names and prices.",
         ],
         tools=[search_flights],
-        llm=OpenAIChatClient(model="gpt-4o"),
+        llm = DaprChatClient(),
         message_bus_name="message-pubsub",
         state_store_name="execution-state",
         state_key="execution-chat",
