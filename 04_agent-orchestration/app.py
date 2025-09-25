@@ -51,7 +51,7 @@ def task_chain_workflow(ctx: wf.DaprWorkflowContext):
 # Activity 1
 @wfr.activity(name="get_character_conv_api")
 def get_character(ctx):
-    with DaprClient() as d:
+    with DaprClient() as daprClient:
         text_input = "Pick a random character from The Lord of the Rings, and respond with the character name only"
 
         inputs = [
@@ -63,11 +63,11 @@ def get_character(ctx):
                         )
                     )
                 ],
-                scrub_pii=True
-            ),
+                scrub_pii=True,
+            )
         ]
 
-        response = d.converse_alpha2(name='openai-mini', temperature=1.0, inputs=inputs)
+        response = daprClient.converse_alpha2(name='openai-mini', temperature=1.0, inputs=inputs)
         character = response.outputs[0].choices[0].message.content
 
     print(f"Character: {character}")

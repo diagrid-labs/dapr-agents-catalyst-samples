@@ -7,7 +7,7 @@ import uuid
 import random
 from typing import List
 from pydantic import BaseModel, Field
-from dapr_agents import tool, DurableAgent
+from dapr_agents import tool, DurableAgent, OpenAIChatClient
 from dapr_agents.llm.dapr import DaprChatClient
 import os
 
@@ -63,8 +63,6 @@ async def main():
         memory=ConversationDaprStateMemory(
             session_id=f"session-headless-{uuid.uuid4().hex[:8]}"
         ),
-
-        llm = DaprChatClient(),
 
         # PubSub input for real-time interaction
         message_bus_name="message-pubsub",
