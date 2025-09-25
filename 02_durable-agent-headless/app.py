@@ -4,6 +4,7 @@ import asyncio
 import logging
 import time
 import uuid
+import random
 from typing import List
 from pydantic import BaseModel, Field
 from dapr_agents import tool, DurableAgent
@@ -30,7 +31,9 @@ def search_flights(destination: str) -> List[FlightOption]:
     """Search for flights to the specified destination."""
     # Mock flight data (would be an external API call in a real app)
 
-    time.sleep(5)
+    # Dynamic delay: 50% no delay, 50% 10-second delay
+    if random.random() < 0.5:
+        time.sleep(20)
 
     return [
         FlightOption(airline="SkyHighAir", price=450.00),

@@ -7,6 +7,6 @@ spec:
   version: v1
   metadata:
     - name: key
-      value: <your open api key>
+      value: <open api key>
     - name: model
-      value: gpt-5-2025-08-07
+      value: gpt-4.1-2025-04-14

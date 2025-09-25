@@ -6,7 +6,7 @@ common:
   daprdLogDestination: console
 
 apps:
-- appID: durable-agent-headless
+- appID: durable-agent-headless-2
   appDirPath: ./
   appPort: 8001
   daprHTTPPort: 3500

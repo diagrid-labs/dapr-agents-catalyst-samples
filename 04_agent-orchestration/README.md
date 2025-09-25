@@ -1,7 +1,7 @@
 
 # LLM and Agent Orchestration with Workflows
 
-This sample demonstrates how to use Dapr workflows and Dapr Agent workflows to orchestrate LLM calls and agents with tools. You'll learn two different approaches: using raw Dapr workflows with activities, and using Dapr Agents' higher-level workflow abstractions with tasks.
+This sample demonstrates how to use Dapr workflows to orchestrate LLM calls and agents with tools. It shows how to integrate the Dapr Conversation API with Dapr Agents in a workflow pattern.
 
 ## Prerequisites
 
@@ -9,74 +9,63 @@ Make sure you have completed the setup from the [main README](../README.md):
 
 ## What This Example Demonstrates
 
-- **Sequential Task Orchestration**: Chain LLM calls and agent interactions
-- **Two Orchestration Patterns**: Raw Dapr workflows vs Dapr Agent workflows
+- **Sequential Activity Orchestration**: Chain Dapr Conversation API calls and agent interactions
+- **Dapr Conversation API Integration**: Using conversation components for LLM calls
 - **Agent Tool Integration**: Agents with validation tools working within workflows
 - **Durable Execution**: Workflow state persisted across restarts
 
 
 ### Architecture
 ```
-Workflow Start → get_character (LLM call) → get_line (Agent + Tool call) → Result
+Workflow Start → get_character (Dapr Conversation API) → get_line (Agent + Tool call) → Result
 ```
 
-## Orchestration Pattern 1: Raw Dapr Workflows
-
-### Overview
-This approach uses Dapr's native workflow engine with activities. It provides fine-grained control over workflow execution and is ideal when you need direct access to Dapr's workflow primitives.
+## Implementation Overview
 
 ### Deploy and Run
 ```bash
-diagrid dev run -f dapr-activity.yaml --approve
+cd 04_agent-orchestration
+dapr run -f dapr.yaml
 ```
 
 ### How It Works
-The workflow (`app_activity.py`) demonstrates a sequential pattern:
+The workflow (`app.py`) demonstrates a sequential pattern:
 
-1. **Activity 1** (`get_character`): Direct OpenAI API call to select a random character
-2. **Activity 2** (`get_line`): Uses a Dapr Agent with validation tool to generate a quote
+1. **Activity 1** (`get_character`): Uses Dapr Conversation API to select a random LOTR character
+2. **Activity 2** (`get_line`): Uses a Dapr Agent with validation tool to generate a famous quote
 
 **Key Features:**
-- Direct OpenAI client usage in activities
-- Agent integration within workflow activities
-- Character validation using agent tools
-- Manual workflow runtime management
+- **Dapr Conversation API**: Direct integration with OpenAI models via Dapr components
+- **Agent Integration**: DaprChatClient for agent LLM interactions
+- **Tool Validation**: Character validation using agent tools
+- **Memory Persistence**: Agent memory stored in Dapr state store
+- **Workflow Orchestration**: Durable execution with state persistence
 
-## Orchestration Pattern 2: Dapr Agent Workflows
+### Code Structure
+```python
+# Activity 1: Character generation using Conversation API
+@wfr.activity(name="step1")
+def get_character(ctx):
+    with DaprClient() as d:
+        response = d.converse_alpha2(name='openai-mini', inputs=inputs)
+        return response.outputs[0].choices[0].message.content
 
-### Overview
-This approach uses Dapr Agents' workflow abstraction with tasks. It provides a higher-level, more declarative way to define workflows.
-
-### Deploy and Run
-```bash
-diagrid dev run -f dapr-task.yaml --approve
+# Activity 2: Quote generation using Dapr Agent
+@wfr.activity(name="step2")
+def get_line(ctx, character: str):
+    response = asyncio.run(agent.run(f"What is a famous line by {character}"))
+    return response.content
 ```
 
-### How It Works
-The workflow (`app_task.py`) uses the same sequential pattern but with a cleaner abstraction:
+## Components Used
 
-1. **Task 1** (`get_character`): LLM task with natural language description
-2. **Task 2** (`get_line`): Agent task that incorporates validation logic
-
-**Key Features:**
-- Declarative task definitions with descriptions
-- Built-in agent integration via `@task(agent=agent)`
-- Automatic workflow runtime management
-- Simplified error handling and state management
-
-## Key Differences Between Approaches
-
-| Feature | Raw Dapr Workflows | Dapr Agent Workflows |
-|---------|-------------------|---------------------|
-| **Abstraction Level** | Low-level activities | High-level tasks |
-| **LLM Integration** | Manual OpenAI client | Declarative descriptions |
-| **Agent Integration** | Manual async calls | Built-in agent parameter |
-| **State Management** | Manual state tracking | Automatic persistence |
-| **Code Complexity** | More verbose | More concise |
+- **openai-mini**: Conversation component for character generation
+- **memory-state**: State store for agent conversation memory
+- **execution-state**: State store for workflow execution state
 
 ## Monitoring in Catalyst
 
 ### Workflow Execution
 - Navigate to Catalyst dashboard → Workflows
 - View detailed step-by-step execution logs
-- Monitor timing and performance differences
+- Monitor conversation API calls and agent interactions
