@@ -8,12 +8,9 @@ from dapr_agents.memory import ConversationDaprStateMemory
 from dapr.clients import DaprClient
 from dapr.clients.grpc.conversation import ConversationInputAlpha2, ConversationMessage, ConversationMessageContent, ConversationMessageOfUser
 from dapr_agents.llm.dapr import DaprChatClient
-
 import logging
 
-# Load environment variables
 load_dotenv()
-
 os.environ.setdefault("DAPR_LLM_COMPONENT_DEFAULT", "openai")
 
 # Initialize Workflow Instance
@@ -21,16 +18,21 @@ wfr = wf.WorkflowRuntime()
 
 @tool
 def validate_character(character: str) -> bool:
-    """Validates if an agent is valid or blacklisted"""
-    return True
+    """Validates if a character is valid or blacklisted"""
+    print(f"Validating character: {character}")
+    return False
 
 # Create agent instance once at module level
 agent = Agent(
     name="Character Agent",
     role="Famous Character Assistant",
     goal="Provide famous character lines after validation",
-    instructions=["For every character, first make sure is valid and not blacklisted. If not then return a famous line "],
+    instructions=["For every character, first verify it is valid and not blacklisted, "
+                  "If valid, then return a famous line, otherwise return NONE"
+                  "avoiding repetition from previous lines"],
     tools=[validate_character],
+
+    # Use Dapr conversation api
     llm=DaprChatClient(),
 
     # Long-term memory (preferences, past trips, context continuity)
@@ -47,10 +49,10 @@ def task_chain_workflow(ctx: wf.DaprWorkflowContext):
     return result2
 
 # Activity 1
-@wfr.activity(name="get_character_conversation_api")
+@wfr.activity(name="get_character_conv_api")
 def get_character(ctx):
     with DaprClient() as d:
-        text_input = "Pick a random character from The Lord of the Rings, until you find a valid character, and respond with the character name only"
+        text_input = "Pick a random character from The Lord of the Rings, and respond with the character name only"
 
         inputs = [
             ConversationInputAlpha2(
@@ -65,7 +67,7 @@ def get_character(ctx):
             ),
         ]
 
-        response = d.converse_alpha2(name='openai-mini', inputs=inputs)
+        response = d.converse_alpha2(name='openai-mini', temperature=1.0, inputs=inputs)
         character = response.outputs[0].choices[0].message.content
 
     print(f"Character: {character}")
@@ -76,11 +78,8 @@ def get_character(ctx):
 def get_line(ctx, character: str):
     response = asyncio.run(agent.run(f"What is a famous line by {character}"))
 
-    # Extract the content from the response message
-    line = response.content if hasattr(response, 'content') else str(response)
-
-    print(f"Line: {line}")
-    return line
+    print(f"Line: {response.content}")
+    return response.content
 
 if __name__ == "__main__":
     wfr.start()
@@ -90,6 +89,6 @@ if __name__ == "__main__":
     instance_id = wf_client.schedule_new_workflow(workflow=task_chain_workflow)
     print(f"Workflow started. Instance ID: {instance_id}")
     state = wf_client.wait_for_workflow_completion(instance_id)
-    print(f"Workflow completed! Status: {state.runtime_status}")
+    print(f"Workflow completed with result: {state.serialized_output}")
 
     wfr.shutdown()
