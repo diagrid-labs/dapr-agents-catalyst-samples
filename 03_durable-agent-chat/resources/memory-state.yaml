@@ -9,6 +9,4 @@ spec:
     - name: redisHost
       value: localhost:6379
     - name: redisPassword
-      value: ""
-    - name: keyPrefix
-      value: none
+      value: "foo"

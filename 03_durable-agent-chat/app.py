@@ -57,7 +57,7 @@ async def start():
         tools=[search_flights],
         llm = DaprChatClient(),
         message_bus_name="message-pubsub",
-        state_store_name="execution-state",
+        state_store_name="statestore",
         state_key="execution-chat",
 
         agents_registry_store_name="registry-state",

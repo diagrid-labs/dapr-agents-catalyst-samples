@@ -233,3 +233,4 @@ __marimo__/
 /03_durable-agent-chat/.files/
 /03_durable-agent-chat/chainlit.md
 /01_non-durable-agent-hello-world/.dapr/
+/02_durable-agent-headless/.dapr/

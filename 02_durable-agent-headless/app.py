@@ -29,7 +29,8 @@ class DestinationSchema(BaseModel):
 def search_flights(destination: str) -> List[FlightOption]:
     """Search for flights to the specified destination."""
     # Mock flight data (would be an external API call in a real app)
-    time.sleep(10)
+
+    time.sleep(5)
 
     return [
         FlightOption(airline="SkyHighAir", price=450.00),
@@ -51,11 +52,6 @@ async def main():
         ],
         tools=[search_flights],
 
-        llm = DaprChatClient(),
-
-        # PubSub input for real-time interaction
-        message_bus_name="message-pubsub",
-
         # Execution state (workflow progress, retries, failure recovery)
         state_store_name="statestore",
         state_key="execution-headless",
@@ -64,6 +60,13 @@ async def main():
         memory=ConversationDaprStateMemory(
             session_id=f"session-headless-{uuid.uuid4().hex[:8]}"
         ),
+
+        llm = DaprChatClient(),
+
+        # PubSub input for real-time interaction
+        message_bus_name="message-pubsub",
+
+        # Agent discovery store
         agents_registry_store_name="registry-state",
     )
 

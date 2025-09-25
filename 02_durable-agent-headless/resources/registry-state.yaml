@@ -12,5 +12,4 @@ spec:
     value: "foo"
   - name: enableTLS
     value: "false"
-  - name: keyPrefix
-    value: none
+
