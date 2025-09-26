@@ -8,7 +8,7 @@ from dapr.ext.workflow import DaprWorkflowClient
 from datetime import timedelta
 import dapr.ext.workflow as wf
 from dapr.clients import DaprClient
-from dapr.clients.grpc._request import ConversationInput
+from dapr.clients.grpc.conversation import ConversationInputAlpha2, ConversationMessage, ConversationMessageContent, ConversationMessageOfUser
 from dapr_agents import tool, Agent, OpenAIChatClient
 
 import os, json, time, asyncio
@@ -298,7 +298,16 @@ Create a message that:
 Format the response as a direct customer message without any additional formatting or metadata."""
 
             inputs = [
-                ConversationInput(content=prompt, role='user', scrub_pii=True)
+                ConversationInputAlpha2(
+                    messages=[
+                        ConversationMessage(
+                            of_user=ConversationMessageOfUser(
+                                content=[ConversationMessageContent(text=prompt)]
+                            )
+                        )
+                    ],
+                    scrub_pii=True,
+                )
             ]
             
             metadata = {
@@ -308,17 +317,16 @@ Format the response as a direct customer message without any additional formatti
             }
             
             # Make the conversation API call
-            response = client.converse_alpha1(
-                name='customer-notification-llm',
+            response = client.converse_alpha2(
+                name='openai',
                 inputs=inputs,
                 temperature=0.3,
-                context_id=f'ticket-{ticket_id}',
                 metadata=metadata
             )
             
             # Extract the response
             if response.outputs:
-                notification_message = response.outputs[0].result
+                notification_message = response.outputs[0].choices[0].message.content
                 logging.info(f"Customer notification created via Conversation API for ticket: {ticket_id}")
                 return notification_message
             else:
@@ -502,7 +510,7 @@ def customer_support_workflow(ctx: wf.DaprWorkflowContext, ticket_data: Dict[str
                     logging.error(f"Customer data missing for {triage_result.get('customer_id')}. Please run the sample data setup script first.")
                     return {
                         "status": "setup_error",
-                        "error": f"Customer data not found for {triage_result.get('customer_id')}. Please run: dapr run --app-id data-setup --resources-path ../resources -- python setup_sample_data.py",
+                        "error": f"Customer data not found for {triage_result.get('customer_id')}. Please run: dapr run --app-id data-setup --resources-path ./resources -- python setup_sample_data.py",
                         "ticket_id": ticket_id
                     }
             except Exception as e:
@@ -686,42 +694,94 @@ def get_ticket_status(ticket_id: str):
         logging.error(f"Error getting status for ticket {ticket_id}: {e}")
         return {"error": f"Failed to get ticket status: {str(e)}"}
 
-@app.get("/health")
-def health_check():
-    """Health check endpoint"""
-    return {"status": "healthy", "service": "customer-support-system"}
-
-@app.get("/health/data")
-def data_health_check():
-    """Check if sample data is loaded"""
+@app.get("/data")
+def list_all_data():
+    """List all data: customers, systems, analysis, and tickets"""
     try:
-        # Check if sample customers exist
-        customer_lookup = lookup_customer("CUST001")
-        system_lookup = lookup_system_info("CUST001")
-        
-        customer_ok = not customer_lookup.get("error")
-        system_ok = not system_lookup.get("error")
-        
-        if customer_ok and system_ok:
-            return {
-                "status": "healthy",
-                "message": "Sample data is loaded and accessible",
-                "customers_loaded": True,
-                "systems_loaded": True
+        with DaprClient() as client:
+            result = {
+                "customers": [],
+                "systems": [],
+                "analysis": [],
+                "tickets": []
             }
-        else:
+            
+            # List customers from customer-state
+            try:
+                customers_response = client.get_bulk_state("customer-state", [])
+                if hasattr(customers_response, 'items'):
+                    for item in customers_response.items:
+                        if item.data:
+                            customer_data = json.loads(item.data)
+                            result["customers"].append({
+                                "key": item.key,
+                                "data": customer_data
+                            })
+            except Exception as e:
+                logging.warning(f"Error listing customers: {e}")
+                result["customers"] = {"error": str(e)}
+            
+            # List systems from system-state
+            try:
+                systems_response = client.get_bulk_state("system-state", [])
+                if hasattr(systems_response, 'items'):
+                    for item in systems_response.items:
+                        if item.data:
+                            system_data = json.loads(item.data)
+                            result["systems"].append({
+                                "key": item.key,
+                                "data": system_data
+                            })
+            except Exception as e:
+                logging.warning(f"Error listing systems: {e}")
+                result["systems"] = {"error": str(e)}
+            
+            # List analysis from analysis-state
+            try:
+                analysis_response = client.get_bulk_state("analysis-state", [])
+                if hasattr(analysis_response, 'items'):
+                    for item in analysis_response.items:
+                        if item.data:
+                            analysis_data = json.loads(item.data)
+                            result["analysis"].append({
+                                "key": item.key,
+                                "data": analysis_data
+                            })
+            except Exception as e:
+                logging.warning(f"Error listing analysis: {e}")
+                result["analysis"] = {"error": str(e)}
+            
+            # List tickets from execution-state (workflow instances)
+            try:
+                tickets_response = client.get_bulk_state("execution-state", [])
+                if hasattr(tickets_response, 'items'):
+                    for item in tickets_response.items:
+                        if item.data:
+                            ticket_data = json.loads(item.data)
+                            result["tickets"].append({
+                                "key": item.key,
+                                "data": ticket_data
+                            })
+            except Exception as e:
+                logging.warning(f"Error listing tickets: {e}")
+                result["tickets"] = {"error": str(e)}
+            
             return {
-                "status": "unhealthy",
-                "message": "Sample data is missing. Please run the setup script.",
-                "customers_loaded": customer_ok,
-                "systems_loaded": system_ok,
-                "setup_command": "dapr run --app-id data-setup --resources-path ../resources -- python setup_sample_data.py"
+                "status": "success",
+                "counts": {
+                    "customers": len(result["customers"]) if isinstance(result["customers"], list) else 0,
+                    "systems": len(result["systems"]) if isinstance(result["systems"], list) else 0,
+                    "analysis": len(result["analysis"]) if isinstance(result["analysis"], list) else 0,
+                    "tickets": len(result["tickets"]) if isinstance(result["tickets"], list) else 0
+                },
+                "data": result
             }
+            
     except Exception as e:
+        logging.error(f"Error listing data: {e}")
         return {
             "status": "error",
-            "message": f"Error checking data health: {str(e)}",
-            "setup_command": "dapr run --app-id data-setup --resources-path ../resources -- python setup_sample_data.py"
+            "message": f"Failed to list data: {str(e)}"
         }
 
 if __name__ == "__main__":

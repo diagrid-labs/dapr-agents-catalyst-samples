@@ -13,4 +13,4 @@ spec:
   - name: actorStateStore
     value: "true"
   - name: keyPrefix
-    value: none
+    value: execution

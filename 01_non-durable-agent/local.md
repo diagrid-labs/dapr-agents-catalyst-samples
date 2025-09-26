@@ -38,6 +38,8 @@ docker run --rm -d --name redisinsight -p 5540:5540 redis/redisinsight:latest
 open http://localhost:5540/
 ```
 
+Connect with: Host (Windows/Mac): host.docker.internal (example host.docker.internal:6379)
+
 ## Recommended Next Steps
 
 For production-ready development and the full feature set, migrate to [Catalyst deployment](../README.md).

@@ -1,8 +1,9 @@
 version: 1
 common:
-  resourcesPath: ../resources/
+  resourcesPath: ./resources/
 apps:
   - appID: customer-support-system
     appDirPath: ./
     appPort: 8000
+    daprHTTPPort: 3500
     command: [ "python", "app.py" , "--host", "0.0.0.0", "--port", "8000"]
