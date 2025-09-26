@@ -1,4 +1,4 @@
-# Headless Dapr Agents
+# Durable Agent Headless
 
 This sample demonstrates how to run a durable headless agent that can be triggered over HTTP REST API and PubSub messaging. Unlike the chat example, this agent runs without a UI and is perfect for backend integrations and automated workflows.
 
@@ -11,8 +11,8 @@ Make sure you have completed the setup from the [main README](../README.md):
 - **Headless Operation**: Agent runs as a service without UI
 - **Dual Triggering**: Support for both REST API and PubSub messaging
 - **Durable Execution**: Workflow state persisted across restarts
-- **Tool Integration**: Flight search with mock external API calls
-- **State Management**: Conversation memory and execution state
+- **Tool Integration**: Flight search with mock external API calls (50% chance of 20-second delay)
+- **State Management**: Conversation memory, execution state, and agent registry
 
 ## Trigger Workflows via REST API
 
@@ -41,7 +41,7 @@ curl -i -X POST http://localhost:8001/start-workflow \
 
 The agent will:
 1. Process your flight request
-2. Execute the `search_flights` tool (simulates 10-second API call)
+2. Execute the `search_flights` tool (50% chance of 20-second delay)
 3. Return flight options with pricing
 4. Persist all state in Catalyst's managed key-value store
 
@@ -53,9 +53,10 @@ The agent will:
 - Inspect individual workflow steps and timing
 
 **Examine State Storage:**
-- Go to Components → Key-Value Store → `execution-state`
+- Go to Components → Key-Value Store → `statestore` (execution state)
 - See how workflow state is persisted
 - View conversation memory in `memory-state`
+- Check agent registry in `registry-state`
 
 ## Option 2: Trigger Workflows via PubSub
 
@@ -71,6 +72,7 @@ This configuration:
 - Runs the headless agent (same as above)
 - Includes a PubSub client (`app_pubsub_client.py`)
 - Automatically sends flight requests to Paris, London, Tokyo, and New York
+- Each request triggers a separate workflow instance
 
 ### 2. Observe Parallel Processing
 
@@ -96,4 +98,5 @@ The PubSub client will automatically trigger multiple workflows:
 ## Next Steps
 
 - Explore the [03_durable-agent-chat](../03_durable-agent-chat/README.md) for interactive UI
+- Check out the [04_agent-orchestration](../04_agent-orchestration/README.md) for multi-agent coordination
 

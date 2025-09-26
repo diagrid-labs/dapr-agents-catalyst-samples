@@ -1,6 +1,6 @@
 # Local Development Alternative
 
-> **Note**: We recommend using [Diagrid Catalyst](../README.md) for the full experience with enterprise-grade observability, managed infrastructure, and workflow visualization. This local setup is provided as an alternative for development scenarios where cloud deployment isn't suitable.
+> **Note**: We recommend using [Diagrid Catalyst](../README.md) for the full experience with enterprise-grade observability and managed infrastructure. This local setup is provided as an alternative for development scenarios where cloud deployment isn't suitable.
 
 ## Prerequisites for Local Setup
 
@@ -12,7 +12,7 @@
 
 This approach lacks several key features provided by Catalyst:
 - Advanced application architecture visualization
-- Enterprise workflow monitoring and debugging
+- Enterprise monitoring and debugging
 - Managed infrastructure with automatic scaling
 - Advanced observability and metrics
 
@@ -24,11 +24,11 @@ Initialize local Dapr components and run the agent:
 # Ensure Dapr is initialized with required components
 dapr init
 
-# Run the hello world agent locally
+# Run the agent locally
 dapr run -f dapr.yaml
 ```
 
-The agent will run with local Redis for state storage and local workflow engine.
+The agent will run with local Redis for conversation memory storage and local Dapr components.
 
 ## Basic Local Monitoring
 

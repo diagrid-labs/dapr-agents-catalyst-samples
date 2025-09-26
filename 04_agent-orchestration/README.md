@@ -1,5 +1,5 @@
 
-# LLM and Agent Orchestration with Workflows
+# Agent Orchestration
 
 This sample demonstrates how to use Dapr workflows to orchestrate LLM calls and agents with tools. It shows how to integrate the Dapr Conversation API with Dapr Agents in a workflow pattern.
 
@@ -13,6 +13,7 @@ Make sure you have completed the setup from the [main README](../README.md):
 - **Dapr Conversation API Integration**: Using conversation components for LLM calls
 - **Agent Tool Integration**: Agents with validation tools working within workflows
 - **Durable Execution**: Workflow state persisted across restarts
+- **Character Validation**: Tool-based validation with blacklist functionality
 
 
 ### Architecture
@@ -24,34 +25,33 @@ Workflow Start → get_character (Dapr Conversation API) → get_line (Agent + T
 
 ### Deploy and Run
 ```bash
-cd 04_agent-orchestration
-dapr run -f dapr.yaml
+diagrid dev run -f dapr.yaml --approve
 ```
 
 ### How It Works
 The workflow (`app.py`) demonstrates a sequential pattern:
 
-1. **Activity 1** (`get_character`): Uses Dapr Conversation API to select a random LOTR character
-2. **Activity 2** (`get_line`): Uses a Dapr Agent with validation tool to generate a famous quote
+1. **Activity 1** (`get_character_conv_api`): Uses Dapr Conversation API to select a random LOTR character
+2. **Activity 2** (`get_line_agent`): Uses a Dapr Agent with validation tool to generate a famous quote
 
 **Key Features:**
 - **Dapr Conversation API**: Direct integration with OpenAI models via Dapr components
 - **Agent Integration**: DaprChatClient for agent LLM interactions
-- **Tool Validation**: Character validation using agent tools
+- **Tool Validation**: Character validation using agent tools (always returns False for demo)
 - **Memory Persistence**: Agent memory stored in Dapr state store
 - **Workflow Orchestration**: Durable execution with state persistence
 
 ### Code Structure
 ```python
 # Activity 1: Character generation using Conversation API
-@wfr.activity(name="step1")
+@wfr.activity(name="get_character_conv_api")
 def get_character(ctx):
-    with DaprClient() as d:
-        response = d.converse_alpha2(name='openai-mini', inputs=inputs)
+    with DaprClient() as daprClient:
+        response = daprClient.converse_alpha2(name='openai-mini', temperature=1.0, inputs=inputs)
         return response.outputs[0].choices[0].message.content
 
 # Activity 2: Quote generation using Dapr Agent
-@wfr.activity(name="step2")
+@wfr.activity(name="get_line_agent")
 def get_line(ctx, character: str):
     response = asyncio.run(agent.run(f"What is a famous line by {character}"))
     return response.content
@@ -59,9 +59,10 @@ def get_line(ctx, character: str):
 
 ## Components Used
 
-- **openai-mini**: Conversation component for character generation
+- **openai-mini**: Conversation component for character generation (gpt-4o-mini)
+- **openai**: Conversation component for agent LLM interactions (gpt-4o)
 - **memory-state**: State store for agent conversation memory
-- **execution-state**: State store for workflow execution state
+- **statestore**: State store for workflow execution state
 
 ## Monitoring in Catalyst
 
@@ -69,3 +70,8 @@ def get_line(ctx, character: str):
 - Navigate to Catalyst dashboard → Workflows
 - View detailed step-by-step execution logs
 - Monitor conversation API calls and agent interactions
+- Track workflow completion and results
+
+## Next Steps
+
+- Explore the [05_customer-support-system](../05_customer-support-system/README.md) for a complete multi-agent system

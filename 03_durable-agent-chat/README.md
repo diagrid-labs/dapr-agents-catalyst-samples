@@ -1,4 +1,4 @@
-# Interactive Chat with Dapr Agents
+# Durable Agent Chat
 
 This example demonstrates how to build an interactive chat interface for durable agents using Chainlit. Unlike the headless examples, this provides a user-friendly web UI where you can have conversations with your agent and see real-time responses.
 
@@ -10,8 +10,9 @@ Make sure you have completed the setup from the [main README](../README.md):
 
 - **Interactive Chat UI**: Web-based chat interface using Chainlit for live conversation with durable agents
 - **Session Management**: Each chat session gets a unique ID for isolated conversations
-- **Persistent Memory**: Agent remembers conversation history across messages
+- **Persistent Memory**: Agent remembers conversation history across messages using Dapr state store
 - **Tool Integration**: Flight search tool accessible through natural conversation
+- **Durable Execution**: Each chat message creates a workflow with state persistence
 
 ### Architecture
 
@@ -19,11 +20,11 @@ Make sure you have completed the setup from the [main README](../README.md):
 User Chat → Chainlit UI → DurableAgent → Tool Calls → Persistent State → Response
 ```
 
-The chat interface creates a new agent session for each user, enabling multiple concurrent conversations with isolated state.
+The chat interface creates a new agent session for each user, enabling multiple concurrent conversations with isolated state. Each message creates a durable workflow that persists execution state.
 
 ## Deploy and Run
 
-Deploy the interactive chat agent to Catalyst:
+Deploy the chat agent to Catalyst:
 
 ```bash
 diagrid dev run -f dapr.yaml --approve
@@ -46,7 +47,7 @@ Open the Chainlit web interface and start with a simple flight request:
 
 This shows how the agent processes your request and provides flight options through the interactive chat interface.
 
-### Multi-Destination Queries for Parallel Tool Execution
+### Multi-Destination Queries
 
 Try a more complex request that triggers multiple tool calls:
 
@@ -54,7 +55,7 @@ Try a more complex request that triggers multiple tool calls:
 
 ![Catalyst Workflow Overview](../images/catalyst-workflow-overview.png)
 
-This demonstrates how the agent intelligently breaks down complex requests and executes multiple parallel tool calls for different destinations.
+This demonstrates how the agent intelligently breaks down complex requests and executes multiple tool calls for different destinations.
 
 ### Complete Workflow Visualization
 Each chat message creates a new workflow execution:
@@ -71,3 +72,4 @@ This side-by-side view shows both the chat interface with comprehensive flight r
 ## Next Steps
 
 - Check out the [04_agent-orchestration](../04_agent-orchestration/README.md) for advanced workflow patterns and orchestration
+- Explore the [05_customer-support-system](../05_customer-support-system/README.md) for a complete multi-agent system

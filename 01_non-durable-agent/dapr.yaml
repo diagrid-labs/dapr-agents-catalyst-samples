@@ -6,7 +6,7 @@ common:
   daprdLogDestination: console
 
 apps:
-- appID: non-durable-agent-hello-world
+- appID: non-durable-agent
   appDirPath: ./
   daprHTTPPort: 3500
   command: [ "python", "app.py"]

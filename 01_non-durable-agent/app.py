@@ -36,7 +36,7 @@ def search_flights(destination: str) -> List[FlightOption]:
 
 async def main():
     travel_planner = Agent(
-        name="TravelBuddy-HelloWorld",
+        name="TravelBuddy-non-durable-agent",
         role="Travel Assistant",
         goal="Help users find flights and remember preferences",
         instructions=["Find flights","Remember preferences","Provide clear info"],
@@ -47,7 +47,7 @@ async def main():
 
         # Long-term memory (preferences, past trips, context continuity)
         memory=ConversationDaprStateMemory(
-            store_name="memory-state", session_id=f"session-hello-world-{uuid.uuid4().hex[:8]}"
+            store_name="memory-state", session_id=f"session-non-durable-agent-{uuid.uuid4().hex[:8]}"
         ),
     )
     try:

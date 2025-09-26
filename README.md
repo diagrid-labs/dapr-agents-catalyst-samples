@@ -48,15 +48,16 @@ Each example demonstrates different patterns and capabilities of Dapr Agents wit
 
 | Example | Description                                                                                                                                    |
 |---------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| [01_durable-agent-hello-world](./01_durable-agent-hello-world/) | **Start here!** Simplest durable agent example demonstrating parallel tool execution and state persistence                                     |
-| [02_durable-agent-headless](./02_durable-agent-headless/) | Headless agent triggered via REST API that demonstrates workflow orchestration for backend integrations                                        |
+| [01_non-durable-agent](./01_non-durable-agent/) | **Start here!** Simplest non-durable agent example demonstrating conversation memory and Dapr chat client integration                                     |
+| [02_durable-agent-headless](./02_durable-agent-headless/) | Durable headless agent triggered via REST API and PubSub that demonstrates workflow orchestration for backend integrations                                        |
 | [03_durable-agent-chat](./03_durable-agent-chat/) | Interactive chat agent with Chainlit UI that maintains conversation state and full workflow observability                                      |
-| [04_agent-orchestration](./04_agent-orchestration/) | Deterministic workflow orchestration including sequential task chains and parallel execution (fan-out/fan-in)|
+| [04_agent-orchestration](./04_agent-orchestration/) | Workflow orchestration combining Dapr Conversation API with Dapr Agents for sequential task chains|
+| [05_customer-support-system](./05_customer-support-system/) | Complete multi-agent system demonstrating complex workflow patterns and agent coordination|
 
 ## Next Steps
 
 
-- Try the [01_durable-agent-hello-world](./01_durable-agent-hello-world/README.md) for a quick intro.
+- Try the [01_non-durable-agent](./01_non-durable-agent/README.md) for a quick intro.
 
 ## Contact Us
 
