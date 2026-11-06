@@ -24,7 +24,7 @@ The chat interface creates a new agent session for each user, enabling multiple 
 
 ## Deploy and Run
 
-Deploy the chat agent to Catalyst:
+Deploy the chat agent to Diagrid:
 
 ```bash
 diagrid dev run -f dapr.yaml --approve
@@ -33,7 +33,7 @@ diagrid dev run -f dapr.yaml --approve
 Once deployed, access your agent:
 
 - **Chat Interface**: [http://localhost:8000/](http://localhost:8000/) - Interactive Chainlit web interface
-- **Catalyst Dashboard**: [https://catalyst.diagrid.io/](https://catalyst.diagrid.io/) - Monitor workflows and agent execution
+- **Diagrid Console**: [https://catalyst.diagrid.io/](https://catalyst.diagrid.io/) - Monitor workflows and agent execution
 
 ## Using the Chat Interface
 
@@ -53,13 +53,13 @@ Try a more complex request that triggers multiple tool calls:
 
 **Example: "Find me flights to top 5 capitals of the world"**
 
-![Catalyst Workflow Overview](../images/catalyst-workflow-overview.png)
+![Diagrid Workflow Overview](../images/catalyst-workflow-overview.png)
 
 This demonstrates how the agent intelligently breaks down complex requests and executes multiple tool calls for different destinations.
 
 ### Complete Workflow Visualization
 Each chat message creates a new workflow execution:
-- Navigate to Catalyst dashboard → Workflows
+- Navigate to Diagrid Console → Workflows
 - Each conversation message appears as a separate workflow
 - View detailed execution for individual chat interactions
 
@@ -67,7 +67,7 @@ See the full journey from chat interaction to workflow execution:
 
 ![Chat and Workflow Side by Side](../images/local-chat-catalyst-side-by-side.png)
 
-This side-by-side view shows both the chat interface with comprehensive flight results and the corresponding workflow execution in Catalyst, demonstrating how each chat message creates detailed workflow traces.
+This side-by-side view shows both the chat interface with comprehensive flight results and the corresponding workflow execution in Diagrid, demonstrating how each chat message creates detailed workflow traces.
 
 ## Next Steps
 
