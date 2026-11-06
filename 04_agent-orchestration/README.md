@@ -64,10 +64,10 @@ def get_line(ctx, character: str):
 - **memory-state**: State store for agent conversation memory
 - **statestore**: State store for workflow execution state
 
-## Monitoring in Catalyst
+## Monitoring in Diagrid
 
 ### Workflow Execution
-- Navigate to Catalyst dashboard → Workflows
+- Navigate to Diagrid Console → Workflows
 - View detailed step-by-step execution logs
 - Monitor conversation API calls and agent interactions
 - Track workflow completion and results

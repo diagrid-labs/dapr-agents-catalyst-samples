@@ -1,6 +1,6 @@
 # Local Development Alternative
 
-> **Note**: We recommend using [Diagrid Catalyst](../README.md) for the full experience with enterprise-grade observability and managed infrastructure. This local setup is provided as an alternative for development scenarios where cloud deployment isn't suitable.
+> **Note**: We recommend using [Diagrid](../README.md) for the full experience with enterprise-grade observability and managed infrastructure. This local setup is provided as an alternative for development scenarios where cloud deployment isn't suitable.
 
 ## Prerequisites for Local Setup
 
@@ -10,7 +10,7 @@
 
 ## Limitations of Local Development
 
-This approach lacks several key features provided by Catalyst:
+This approach lacks several key features provided by Diagrid:
 - Advanced application architecture visualization
 - Enterprise monitoring and debugging
 - Managed infrastructure with automatic scaling
@@ -42,4 +42,4 @@ Connect with: Host (Windows/Mac): host.docker.internal (example host.docker.inte
 
 ## Recommended Next Steps
 
-For production-ready development and the full feature set, migrate to [Catalyst deployment](../README.md).
+For production-ready development and the full feature set, migrate to [Diagrid deployment](../README.md).

@@ -18,7 +18,7 @@ Make sure you have completed the setup from the [main README](../README.md):
 
 ### 1. Deploy and Run the Agent
 
-Deploy the headless agent to Catalyst with managed infrastructure:
+Deploy the headless agent to Diagrid with managed infrastructure:
 
 ```bash
 diagrid dev run -f dapr.yaml --approve
@@ -43,12 +43,12 @@ The agent will:
 1. Process your flight request
 2. Execute the `search_flights` tool (50% chance of 20-second delay)
 3. Return flight options with pricing
-4. Persist all state in Catalyst's managed key-value store
+4. Persist all state in Diagrid's managed key-value store
 
-### 3. Monitor Execution in Catalyst
+### 3. Monitor Execution in Diagrid
 
 **Check Workflow Execution:**
-- Navigate to Catalyst dashboard → Workflows
+- Navigate to Diagrid Console → Workflows
 - View real-time execution progress and detailed logs
 - Inspect individual workflow steps and timing
 
@@ -79,16 +79,16 @@ This configuration:
 The PubSub client will automatically trigger multiple workflows:
 - Each destination gets processed as a separate workflow
 - Agent handles multiple concurrent requests
-- All executions are tracked independently in Catalyst
+- All executions are tracked independently in Diagrid
 
 ### 3. Explore Application Architecture
 
 **View Service Communication:**
-- In Catalyst dashboard → Application Map
+- In Diagrid Console → Application Map
 - See the interaction between PubSub client and agent
 - Observe message flow and service dependencies
 
-![Catalyst Application Architecture](../images/catalyst-durable-agent-headless-app-map.png)
+![Diagrid Application Architecture](../images/catalyst-durable-agent-headless-app-map.png)
 
 **Monitor PubSub Messaging:**
 - Components → Pub/Sub → `message-pubsub`

@@ -1,6 +1,6 @@
-# Dapr Agents Examples with Diagrid Catalyst
+# Dapr Agents Examples with Diagrid
 
-These samples demonstrate how to build and deploy durable agentic workloads using [Dapr Agents](https://github.com/dapr/dapr-agents), and run them with [Diagrid Catalyst](https://www.diagrid.io/catalyst).
+These samples demonstrate how to build and deploy durable agentic workloads using [Dapr Agents](https://github.com/dapr/dapr-agents), and run them with [Diagrid](https://www.diagrid.io/catalyst).
 
 ## Prerequisites
 
@@ -23,11 +23,11 @@ pip install -r requirements.txt
 export OPENAI_API_KEY=your_api_key_here
 ```
 
-### Sign up for Catalyst and Download CLI
+### Sign up for Diagrid and Download CLI
 
-Sign up for Diagrid Catalyst and install the CLI: https://docs.diagrid.io/catalyst/getting-started/first-api-call
+Sign up for Diagrid and install the CLI: https://docs.diagrid.io/getting-started/quickstarts/
 
-Now login to Catalyst and create a project with all the infrastructure your agent needs - workflows for orchestration, pub/sub for messaging, and key-value storage for state:
+Now login to Diagrid and create a project with all the infrastructure your agent needs - workflows for orchestration, pub/sub for messaging, and key-value storage for state:
 
 ### Create a Project with Agentic Infrastructure
 
@@ -39,12 +39,12 @@ diagrid project create dapr-agents-catalyst-samples --deploy-managed-pubsub --de
 
 This provisions a complete managed Dapr environment in the cloud. The project overview shows your managed infrastructure components being deployed:
 
-![Catalyst Project Components Overview](images/catalyst-components.png)
+![Diagrid Project Components Overview](images/catalyst-components.png)
 
 
 ## Examples
 
-Each example demonstrates different patterns and capabilities of Dapr Agents with Catalyst. Navigate to each folder and follow the specific instructions in their README files.
+Each example demonstrates different patterns and capabilities of Dapr Agents with Diagrid. Navigate to each folder and follow the specific instructions in their README files.
 
 | Example | Description                                                                                                                                    |
 |---------|------------------------------------------------------------------------------------------------------------------------------------------------|
